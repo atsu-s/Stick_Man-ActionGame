@@ -12,6 +12,8 @@ public class player : MonoBehaviour
     public float gravity; //重力
     public GroundCheck ground; //接地判定
     public GroundCheck head; //頭をぶつけた判定
+    public AnimationCurve dashCurve;
+    public AnimationCurve jumpCurve;
 
     // プライベート変数
     private Animator anim = null;
@@ -21,6 +23,8 @@ public class player : MonoBehaviour
     private bool isJump = false;
     private float jumpPos = 0.0f;
     private float jumpTime = 0.0f;
+    private float dashTime = 0.0f;
+    private float beforeKey = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -82,18 +86,40 @@ public class player : MonoBehaviour
         {
             transform.localScale = new Vector3(1, 1, 1);
             anim.SetBool("run", true);
+            dashTime += Time.deltaTime;
             xSpeed = speed;
         }
         else if(horizontalKey < 0)
         {
             transform.localScale = new Vector3(-1, 1, 1);
             anim.SetBool("run", true);
+            dashTime += Time.deltaTime;
             xSpeed = -speed;
         }
         else
         {
             anim.SetBool("run", false);
+            dashTime = 0.0f;
             xSpeed = 0.0f;
+        }
+
+        // 前回の入力から反転したらリセット
+        if (horizontalKey > 0 && beforeKey < 0)
+        {
+            dashTime = 0.0f;
+        }
+        else if(horizontalKey < 0 && beforeKey > 0)
+        {
+            dashTime = 0.0f;
+        }
+        beforeKey = horizontalKey;
+
+        // アニメーションカーブ適用
+        xSpeed *= dashCurve.Evaluate(dashTime);
+
+        if (isJump)
+        {
+            ySpeed *= jumpCurve.Evaluate(jumpTime);
         }
 
         anim.SetBool("jump", isJump);
