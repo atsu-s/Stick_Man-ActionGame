@@ -57,9 +57,9 @@ public class player : MonoBehaviour
     }
 
     /// <summary>
-    /// Y成分で必要な計算をして、速度を返す
+    /// Y成分の計算をし、速度を返す
     /// </summary>
-    /// <return>Y軸の速さ</return>
+    /// <returns>Y軸速度</returns>
     private float GetYSpeed()
     {
         float verticalKey = Input.GetAxis("Vertical");
@@ -109,9 +109,9 @@ public class player : MonoBehaviour
     }
 
     /// <summary>
-    /// X成分で必要な計算をして、速度を返す
+    /// X成分の計算をし、速度を返す
     /// </summary>
-    /// <return>X軸の速さ</return>
+    /// <returns>X軸速度</returns>
     private float GetXSpeed()
     {
         float horizontalKey = Input.GetAxis("Horizontal");

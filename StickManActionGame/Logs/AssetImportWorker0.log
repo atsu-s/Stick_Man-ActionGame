@@ -145,3 +145,35 @@ System memory in use after: 184.1 MB.
 Unloading 22 unused Assets to reduce memory usage. Loaded Objects now: 2673.
 Total: 1.605667 ms (FindLiveObjects: 0.127958 ms CreateObjectMapping: 0.040000 ms MarkObjects: 1.332667 ms  DeleteObjects: 0.104417 ms)
 
+========================================================================
+Received Import Request.
+  Time since last request: 1655.410844 seconds.
+  path: Assets/Scripts/GroundCheck.cs
+  artifactKey: Guid(ee69b83fcd18948089bcbcb2183f8995) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/GroundCheck.cs using Guid(ee69b83fcd18948089bcbcb2183f8995) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1b0921e4fbd6a1ad0dd2f2b023fd79a5') in 0.022465 seconds
+  Import took 0.035735 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.007135 seconds.
+  path: Assets/Scripts/GroundCheck.cs
+  artifactKey: Guid(ee69b83fcd18948089bcbcb2183f8995) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/GroundCheck.cs using Guid(ee69b83fcd18948089bcbcb2183f8995) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1b0921e4fbd6a1ad0dd2f2b023fd79a5') in 0.002040 seconds
+  Import took 0.005265 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.244490 seconds.
+  path: Assets/Scripts/player.cs
+  artifactKey: Guid(57fd01c84e9974eb5909333a74010184) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/player.cs using Guid(57fd01c84e9974eb5909333a74010184) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0998d39ddc300be2eb038f625ab52053') in 0.001856 seconds
+  Import took 0.004637 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.005502 seconds.
+  path: Assets/Scripts/player.cs
+  artifactKey: Guid(57fd01c84e9974eb5909333a74010184) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/player.cs using Guid(57fd01c84e9974eb5909333a74010184) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0998d39ddc300be2eb038f625ab52053') in 0.001786 seconds
+  Import took 0.004384 seconds .
+
