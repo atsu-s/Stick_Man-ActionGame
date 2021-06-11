@@ -578,3 +578,11 @@ System memory in use after: 207.3 MB.
 Unloading 22 unused Assets to reduce memory usage. Loaded Objects now: 2731.
 Total: 1.796125 ms (FindLiveObjects: 0.170750 ms CreateObjectMapping: 0.049042 ms MarkObjects: 1.448125 ms  DeleteObjects: 0.127166 ms)
 
+========================================================================
+Received Import Request.
+  Time since last request: 197.572936 seconds.
+  path: Assets/Animation/player_lose.anim
+  artifactKey: Guid(27181f44e56a84ca4940a64e842b930b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animation/player_lose.anim using Guid(27181f44e56a84ca4940a64e842b930b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '66680fb0ef0a468a2e77eef4bc42a447') in 0.054955 seconds
+  Import took 0.061474 seconds .
+
