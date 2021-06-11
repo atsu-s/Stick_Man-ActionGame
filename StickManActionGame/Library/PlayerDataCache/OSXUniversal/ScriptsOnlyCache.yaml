@@ -1000,4 +1000,4 @@ ScriptsOnlyBuild:
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
   - Assets/Scenes/GameOverScene.unity
-  playerPath: /Users/atsu/Desktop/SampleGame3.app
+  playerPath: /Users/atsu/Desktop/SampleGame4.app
