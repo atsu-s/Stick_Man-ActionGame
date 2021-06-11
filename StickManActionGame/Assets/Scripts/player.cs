@@ -4,27 +4,30 @@ using UnityEngine;
 
 public class player : MonoBehaviour
 {
-    // インスペクターで設定
-    public float speed; //速度
-    public float jumpSpeed; //ジャンプ
-    public float jumpHeight; //ジャンプ高さ
-    public float jumpLimitTime; //ジャンプ制限時間
-    public float gravity; //重力
-    public GroundCheck ground; //接地判定
-    public GroundCheck head; //頭をぶつけた判定
-    public AnimationCurve dashCurve;
-    public AnimationCurve jumpCurve;
+    #region // インスペクターで設定
+    [Header("移動速度")]public float speed;
+    [Header("ジャンプ速度")]public float jumpSpeed;
+    [Header("ジャンプ高さ")]public float jumpHeight;
+    [Header("ジャンプ制限時間")]public float jumpLimitTime;
+    [Header("重力")]public float gravity;
+    [Header("接地判定")]public GroundCheck ground;
+    [Header("頭をぶつけた判定")]public GroundCheck head;
+    [Header("ダッシュ加減速")]public AnimationCurve dashCurve;
+    [Header("ジャンプ加減速")]public AnimationCurve jumpCurve;
+    #endregion
 
-    // プライベート変数
+    #region // プライベート変数
     private Animator anim = null;
     private Rigidbody2D rb = null;
     private bool isGround = false;
     private bool isHead = false;
     private bool isJump = false;
+    private bool isRun = false;
     private float jumpPos = 0.0f;
     private float jumpTime = 0.0f;
     private float dashTime = 0.0f;
     private float beforeKey = 0.0f;
+    #endregion
 
     // Start is called before the first frame update
     void Start()
@@ -41,11 +44,25 @@ public class player : MonoBehaviour
         isGround = ground.IsGround();
         isHead = head.IsGround();
 
-        // キー入力に関する処理
-        float horizontalKey = Input.GetAxis("Horizontal");
-        float verticalKey = Input.GetAxis("Vertical");
+        // 各種座標軸の速度を求める
+        
+        float ySpeed = GetYSpeed();
+        float xSpeed = GetXSpeed();
 
-        float xSpeed = 0.0f;
+        // アニメーション適用
+        SetAnimation();
+
+    // 移動速度を設定
+        rb.velocity = new Vector2(xSpeed, ySpeed);
+    }
+
+    /// <summary>
+    /// Y成分で必要な計算をして、速度を返す
+    /// </summary>
+    /// <return>Y軸の速さ</return>
+    private float GetYSpeed()
+    {
+        float verticalKey = Input.GetAxis("Vertical");
         float ySpeed = -gravity;
 
         if (isGround)
@@ -82,23 +99,42 @@ public class player : MonoBehaviour
             }
         }
 
-        if(horizontalKey > 0)
+        // アニメーションカーブ適用
+        if (isJump)
+        {
+            ySpeed *= jumpCurve.Evaluate(jumpTime);
+        }
+
+        return ySpeed;
+    }
+
+    /// <summary>
+    /// X成分で必要な計算をして、速度を返す
+    /// </summary>
+    /// <return>X軸の速さ</return>
+    private float GetXSpeed()
+    {
+        float horizontalKey = Input.GetAxis("Horizontal");
+
+        float xSpeed = 0.0f;
+
+                if(horizontalKey > 0)
         {
             transform.localScale = new Vector3(1, 1, 1);
-            anim.SetBool("run", true);
+            isRun = true;
             dashTime += Time.deltaTime;
             xSpeed = speed;
         }
         else if(horizontalKey < 0)
         {
             transform.localScale = new Vector3(-1, 1, 1);
-            anim.SetBool("run", true);
+            isRun = true;
             dashTime += Time.deltaTime;
             xSpeed = -speed;
         }
         else
         {
-            anim.SetBool("run", false);
+            isRun = false;
             dashTime = 0.0f;
             xSpeed = 0.0f;
         }
@@ -117,13 +153,13 @@ public class player : MonoBehaviour
         // アニメーションカーブ適用
         xSpeed *= dashCurve.Evaluate(dashTime);
 
-        if (isJump)
-        {
-            ySpeed *= jumpCurve.Evaluate(jumpTime);
-        }
+        return xSpeed;
+    }
 
+    private void SetAnimation()
+    {
         anim.SetBool("jump", isJump);
         anim.SetBool("ground", isGround);
-        rb.velocity = new Vector2(xSpeed, ySpeed);
+        anim.SetBool("run", isRun);
     }
 }
