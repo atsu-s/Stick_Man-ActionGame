@@ -2,8 +2,10 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - Button
-    - Enemy
+    - EnemyCollisionCheck
+    - Enemy_Zako_1
     - GroundCheck
+    - ObjectCollision
     - player
     Cinemachine.dll:
     - Cinemachine.CinemachineBrain
@@ -81,7 +83,7 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 3474}
     - Class: 114
-      Script: {instanceID: 21480}
+      Script: {instanceID: 4402}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -148,7 +150,11 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 4012}
     - Class: 114
-      Script: {instanceID: 22064}
+      Script: {instanceID: 4326}
+    - Class: 114
+      Script: {instanceID: 21658}
+    - Class: 114
+      Script: {instanceID: 23168}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 157
@@ -452,7 +458,7 @@ ScriptsOnlyBuild:
     className: CinemachineHardLookAt
   - hash:
       serializedVersion: 2
-      Hash: 5701dee4f5aa9c1400aa677077635450
+      Hash: 9d33c34269d39eddc392222a2e43c173
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: player
@@ -734,6 +740,12 @@ ScriptsOnlyBuild:
     className: Dropdown
   - hash:
       serializedVersion: 2
+      Hash: 6b944e5464b5aa666c3eae224f020073
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ObjectCollision
+  - hash:
+      serializedVersion: 2
       Hash: a5781dc71a671b1ad2b38de19f24b71f
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
@@ -750,6 +762,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.2D.SpriteShape.Runtime.dll
     namespaceName: UnityEngine.U2D
     className: SpriteShape
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Button
   - hash:
       serializedVersion: 2
       Hash: c3d3430df9e3ea95e3e3d587961390fb
@@ -986,18 +1004,18 @@ ScriptsOnlyBuild:
     className: FabrikSolver2D
   - hash:
       serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+      Hash: d76c21ffcd49b0374fb5f0724572dfbd
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: Button
+    className: Enemy_Zako_1
   - hash:
       serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+      Hash: 3a5a791fed98c630887d76dcb6401fa8
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: Enemy
+    className: EnemyCollisionCheck
   platform: 2
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
   - Assets/Scenes/GameOverScene.unity
-  playerPath: /Users/atsu/Desktop/SampleGame4.app
+  playerPath: /Users/atsu/Desktop/SampleGame5.app

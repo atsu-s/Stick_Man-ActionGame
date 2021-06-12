@@ -1019,3 +1019,56 @@ System memory in use after: 211.8 MB.
 Unloading 22 unused Assets to reduce memory usage. Loaded Objects now: 2820.
 Total: 1.689458 ms (FindLiveObjects: 0.160750 ms CreateObjectMapping: 0.091250 ms MarkObjects: 1.330250 ms  DeleteObjects: 0.106083 ms)
 
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.003961 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.39 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  2.375 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.39 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 2225 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 211.9 MB.
+System memory in use after: 212.0 MB.
+
+Unloading 22 unused Assets to reduce memory usage. Loaded Objects now: 2824.
+Total: 1.674583 ms (FindLiveObjects: 0.143375 ms CreateObjectMapping: 0.045666 ms MarkObjects: 1.383625 ms  DeleteObjects: 0.100916 ms)
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.002836 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.43 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  2.612 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.45 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 2225 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 212.1 MB.
+System memory in use after: 212.2 MB.
+
+Unloading 22 unused Assets to reduce memory usage. Loaded Objects now: 2828.
+Total: 1.836250 ms (FindLiveObjects: 0.207375 ms CreateObjectMapping: 0.058625 ms MarkObjects: 1.455208 ms  DeleteObjects: 0.114000 ms)
+
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 1.38 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 19 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 168.6 MB.
+System memory in use after: 168.7 MB.
+
+Unloading 19 unused Assets to reduce memory usage. Loaded Objects now: 2828.
+Total: 2.799042 ms (FindLiveObjects: 0.144625 ms CreateObjectMapping: 0.042417 ms MarkObjects: 2.526250 ms  DeleteObjects: 0.085125 ms)
+
