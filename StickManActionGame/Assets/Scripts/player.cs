@@ -9,7 +9,8 @@ public class player : MonoBehaviour
     [Header("移動速度")]public float speed;
     [Header("ジャンプ速度")]public float jumpSpeed;
     [Header("ジャンプ高さ")]public float jumpHeight;
-    [Header("ジャンプ制限時間")]public float jumpLimitTime;
+    [Header("ジャンプする長さ")]public float jumpLimitTime;
+    [Header("踏みつけ判定の高さの割合")]public float stepOnRate;
     [Header("重力")]public float gravity;
     [Header("接地判定")]public GroundCheck ground;
     [Header("頭をぶつけた判定")]public GroundCheck head;
@@ -20,12 +21,15 @@ public class player : MonoBehaviour
     #region // プライベート変数
     private Animator anim = null;
     private Rigidbody2D rb = null;
+    private CapsuleCollider2D capcol = null;
     private bool isGround = false;
     private bool isHead = false;
     private bool isJump = false;
     private bool isRun = false;
     private bool isLose = false;
+    private bool isOtherJump = false;
     private float jumpPos = 0.0f;
+    private float otherJumpHeight = 0.0f;
     private float jumpTime = 0.0f;
     private float dashTime = 0.0f;
     private float beforeKey = 0.0f;
@@ -38,6 +42,7 @@ public class player : MonoBehaviour
         // コンポーネントのインスタンスを捕まえる
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        capcol = GetComponent<CapsuleCollider2D>();
     }
 
     // Update is called once per frame
@@ -75,7 +80,26 @@ public class player : MonoBehaviour
         float verticalKey = Input.GetAxis("Vertical");
         float ySpeed = -gravity;
 
-        if (isGround)
+        // ジャンプ中
+        if (isOtherJump)
+        {
+            // 現在の高さが飛べる高さより下か
+            bool canHeight = jumpPos + otherJumpHeight > transform.position.y;
+            // ジャンプ時間が長くないか
+            bool canTime = jumpLimitTime > jumpTime;
+            if (canHeight && canTime && !isHead)
+            {
+                ySpeed = jumpSpeed;
+                jumpTime += Time.deltaTime;
+            }
+            else
+            {
+                isOtherJump = false;
+                jumpTime = 0.0f;
+            }
+        }
+        // 地面にいる時
+        else if (isGround)
         {
             if (verticalKey > 0)
             {
@@ -89,6 +113,7 @@ public class player : MonoBehaviour
                 isJump = false;
             }
         }
+        // ジャンプ中
         else if (isJump)
         {
             // 上キーを押しているか
@@ -110,7 +135,7 @@ public class player : MonoBehaviour
         }
 
         // アニメーションカーブ適用
-        if (isJump)
+        if (isJump || isOtherJump)
         {
             ySpeed *= jumpCurve.Evaluate(jumpTime);
         }
@@ -171,7 +196,7 @@ public class player : MonoBehaviour
     /// </summary>
     private void SetAnimation()
     {
-        anim.SetBool("jump", isJump);
+        anim.SetBool("jump", isJump || isOtherJump);
         anim.SetBool("ground", isGround);
         anim.SetBool("run", isRun);
     }
@@ -180,8 +205,36 @@ public class player : MonoBehaviour
     {
         if (collision.collider.tag == enemyTag)
         {
-            anim.Play("player_lose");
-            isLose = true;
+            foreach (ContactPoint2D p in collision.contacts)
+            {
+                // 踏みつけ判定になる高さ
+                float stepOnHeight = (capcol.size.y * (stepOnRate / 100f));
+
+                // 踏みつけ判定のワールド座標
+                float judgePos = transform.position.y - (capcol.size.y / 2f) + stepOnHeight;
+
+                if (p.point.y < judgePos ) // 衝突した位置が自分の中心より下だったら
+                {
+                    // もう一度跳ねる
+                    ObjectCollision o = collision.gameObject.GetComponent<ObjectCollision>();
+                    if (o != null)
+                    {
+                        otherJumpHeight = o.boundHeight;
+                        o.playerStepOn = true;
+                        jumpPos =transform.position.y;
+                        isOtherJump = true;
+                        isJump = false;
+                        jumpTime = 0.0f;
+                    }
+                }
+                else
+                {
+                    // ダウン
+                    anim.Play("player_lose");
+                    isLose = true;
+                    break;
+                }
+            }
         }
-     }
+    }
 }
