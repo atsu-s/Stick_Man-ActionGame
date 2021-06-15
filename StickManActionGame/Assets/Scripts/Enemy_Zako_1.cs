@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy_Zako_1 : MonoBehaviour
 {
     #region //インスペクターで設定する
+    [Header("加算スコア")] public int myScore;
     [Header("移動速度")] public float speed;
     [Header("重力")] public float gravity;
     [Header("画面外でも行動するか")] public bool nonVisibleAct;
@@ -66,6 +67,10 @@ public class Enemy_Zako_1 : MonoBehaviour
                 rb.velocity = new Vector2(0, 1-gravity);
                 isDead = true;
                 col.enabled = false;
+                if (GManager.instance != null)
+                {
+                    GManager.instance.score += myScore;
+                }
                 Destroy(gameObject, 3f);
             }
             // else
