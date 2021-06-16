@@ -30,6 +30,7 @@ public class Player : MonoBehaviour
     private bool isLose = false;
     private bool isOtherJump = false;
     private bool isContinue = false;
+    private bool nonLoseAnim = false;
     private float continueTime = 0.0f;
     private float blinkTime = 0.0f;
     private float jumpPos = 0.0f;
@@ -38,6 +39,8 @@ public class Player : MonoBehaviour
     private float dashTime = 0.0f;
     private float beforeKey = 0.0f;
     private string enemyTag = "Enemy";
+    private string deadAreaTag = "DeadArea";
+    private string hitAreaTag = "HitArea";
     #endregion
 
     // Start is called before the first frame update
@@ -87,16 +90,17 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (!isLose)
+        if (!isLose && !GManager.instance.isGameOver)
         {
         // 接地判定を受け取る
         isGround = ground.IsGround();
         isHead = head.IsGround();
 
         // 各種座標軸の速度を求める
-        
-        float ySpeed = GetYSpeed();
+
         float xSpeed = GetXSpeed();
+        float ySpeed = GetYSpeed();
+
 
         // アニメーション適用
         SetAnimation();
@@ -210,8 +214,8 @@ public class Player : MonoBehaviour
         else
         {
             isRun = false;
-            dashTime = 0.0f;
             xSpeed = 0.0f;
+            dashTime = 0.0f;
         }
 
         // 前回の入力から反転したらリセット
@@ -223,11 +227,8 @@ public class Player : MonoBehaviour
         {
             dashTime = 0.0f;
         }
-        beforeKey = horizontalKey;
-
-        // アニメーションカーブ適用
         xSpeed *= dashCurve.Evaluate(dashTime);
-
+        beforeKey = horizontalKey;
         return xSpeed;
     }
 
@@ -243,7 +244,14 @@ public class Player : MonoBehaviour
 
     public bool IsContinueWaiting()
     {
-        return IsDownAnimEnd();
+        if (GManager.instance.isGameOver)
+        {
+            return false;
+        }
+        else
+        {
+        return IsDownAnimEnd() || nonLoseAnim;
+        }
     }
 
     // ダウンアニメーションが完了しているか
@@ -271,6 +279,28 @@ public class Player : MonoBehaviour
         isOtherJump = false;
         isRun = false;
         isContinue = true;
+        nonLoseAnim = false;
+    }
+
+    private void ReceiveDamage(bool loseAnim)
+    {
+        if (isLose)
+        {
+            return;
+        }
+        else
+        {
+            if (loseAnim)
+            {
+                anim.Play("player_lose");
+            }
+            else
+            {
+                nonLoseAnim = true;
+            }
+            isLose = true;
+            GManager.instance.SubHeartNum();
+        }
     }
 
     #region //接触判定
@@ -299,15 +329,30 @@ public class Player : MonoBehaviour
                         isJump = false;
                         jumpTime = 0.0f;
                     }
+                    else
+                    {
+                        Debug.Log("ObjectCollisionが付いてないよ!");
+                    }
                 }
                 else
                 {
                     // ダウン
-                    anim.Play("player_lose");
-                    isLose = true;
+                    ReceiveDamage(true);
                     break;
                 }
             }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == deadAreaTag)
+        {
+            ReceiveDamage(false);
+        }
+        else if (collision.tag == hitAreaTag)
+        {
+            ReceiveDamage(true);
         }
     }
     #endregion

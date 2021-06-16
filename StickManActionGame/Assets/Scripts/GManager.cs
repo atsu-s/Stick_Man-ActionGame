@@ -5,21 +5,52 @@ using UnityEngine;
 public class GManager : MonoBehaviour
 {
     public static GManager instance = null;
-    public int score;
-    public int stageNum;
-    public int continueNum;
-    public int heartNum;
+    [Header("スコア")] public int score;
+    [Header("現在のステージ")] public int stageNum;
+    [Header("現在の復帰位置")] public int continueNum;
+    [Header("現在の残機")] public int heartNum;
+    [Header("デフォルト残機")] public int defaultHeartNum;
+    [HideInInspector] public bool isGameOver = false;
 
     private void Awake()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(this.gameObject); 
+            DontDestroyOnLoad(this.gameObject);
         }
         else
         {
             Destroy(this.gameObject);
         }
+    }
+
+    public void AddHeartNum()
+    {
+        if (heartNum < 99)
+        {
+            ++heartNum;
+        }
+    }
+
+    public void SubHeartNum()
+    {
+        if (heartNum > 0)
+        {
+            --heartNum;
+        }
+        else
+        {
+            isGameOver = true;
+        }
+    }
+
+    public void RetryGame()
+    {
+        isGameOver = false;
+        heartNum = defaultHeartNum;
+        score = 0;
+        stageNum = 1;
+        continueNum = 0;
     }
 }
