@@ -6,16 +6,19 @@ using UnityEngine.SceneManagement;
 public class Player : MonoBehaviour
 {
     #region // インスペクターで設定
-    [Header("移動速度")]public float speed;
-    [Header("ジャンプ速度")]public float jumpSpeed;
-    [Header("ジャンプ高さ")]public float jumpHeight;
-    [Header("ジャンプする長さ")]public float jumpLimitTime;
-    [Header("踏みつけ判定の高さの割合")]public float stepOnRate;
-    [Header("重力")]public float gravity;
-    [Header("接地判定")]public GroundCheck ground;
-    [Header("頭をぶつけた判定")]public GroundCheck head;
-    [Header("ダッシュ加減速")]public AnimationCurve dashCurve;
-    [Header("ジャンプ加減速")]public AnimationCurve jumpCurve;
+    [Header("移動速度")] public float speed;
+    [Header("ジャンプ速度")] public float jumpSpeed;
+    [Header("ジャンプ高さ")] public float jumpHeight;
+    [Header("ジャンプする長さ")] public float jumpLimitTime;
+    [Header("踏みつけ判定の高さの割合")] public float stepOnRate;
+    [Header("重力")] public float gravity;
+    [Header("接地判定")] public GroundCheck ground;
+    [Header("頭をぶつけた判定")] public GroundCheck head;
+    [Header("ダッシュ加減速")] public AnimationCurve dashCurve;
+    [Header("ジャンプ加減速")] public AnimationCurve jumpCurve;
+    [Header("ジャンプの時に鳴らすSE")] public AudioClip jumpSE;
+    [Header("ダメージSE")] public AudioClip loseSE;
+    [Header("落下SE")] public AudioClip dropSE;
     #endregion
 
     #region // プライベート変数
@@ -147,6 +150,10 @@ public class Player : MonoBehaviour
         {
             if (verticalKey > 0)
             {
+                if  (!isJump)
+                {
+                    GManager.instance.PlaySE(jumpSE);
+                }
                 ySpeed = jumpSpeed;
                 jumpPos = transform.position.y; //ジャンプした位置を記録
                 isJump = true;
@@ -175,6 +182,7 @@ public class Player : MonoBehaviour
             {
                 isJump = false;
                 jumpTime = 0.0f;
+                GManager.instance.PlaySE(dropSE);
             }
         }
 
@@ -293,6 +301,7 @@ public class Player : MonoBehaviour
             if (loseAnim)
             {
                 anim.Play("player_lose");
+                GManager.instance.PlaySE(loseSE);
             }
             else
             {

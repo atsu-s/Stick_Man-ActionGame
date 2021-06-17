@@ -9,6 +9,8 @@ public class StageCtrl : MonoBehaviour
     [Header("コンティニュー位置")] public GameObject[] continuePoint;
     [Header("ゲームオーバー")] public GameObject gameOverObj;
     [Header("フェード")] public FadeImage fade;
+    [Header("ゲームオーバーSE")] public AudioClip gameOverSE;
+    [Header("リトライSE")] public AudioClip retrySE;
 
     private Player p;
     private int nextStageNum;
@@ -45,6 +47,7 @@ public class StageCtrl : MonoBehaviour
         {
             gameOverObj.SetActive(true);
             doGameOver = true;
+            GManager.instance.PlaySE(gameOverSE);
         }
         //プレイヤーがやられた時の処理
         else if (p != null && p.IsContinueWaiting() && !doGameOver)
@@ -83,6 +86,7 @@ public class StageCtrl : MonoBehaviour
     {
         ChangeScene(1);
         retryGame = true;
+        GManager.instance.PlaySE(retrySE);
     }
 
     public void ChangeScene(int num)

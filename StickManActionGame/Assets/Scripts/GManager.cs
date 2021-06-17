@@ -12,6 +12,8 @@ public class GManager : MonoBehaviour
     [Header("デフォルト残機")] public int defaultHeartNum;
     [HideInInspector] public bool isGameOver = false;
 
+    private AudioSource audioSource = null;
+
     private void Awake()
     {
         if (instance == null)
@@ -23,6 +25,11 @@ public class GManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+    }
+
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void AddHeartNum()
@@ -52,5 +59,17 @@ public class GManager : MonoBehaviour
         score = 0;
         stageNum = 1;
         continueNum = 0;
+    }
+
+    public void PlaySE(AudioClip clip)
+    {
+        if (audioSource != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
+        else
+        {
+            Debug.Log("オーディオソースが設定されていません");
+        }
     }
 }
