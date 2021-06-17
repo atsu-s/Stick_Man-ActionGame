@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
     private Rigidbody2D rb = null;
     private CapsuleCollider2D capcol = null;
     private SpriteRenderer sr = null;
+    private MoveObject moveObj = null;
     private bool isGround = false;
     private bool isHead = false;
     private bool isJump = false;
@@ -44,6 +45,8 @@ public class Player : MonoBehaviour
     private string enemyTag = "Enemy";
     private string deadAreaTag = "DeadArea";
     private string hitAreaTag = "HitArea";
+    private string moveFloorTag = "MoveFloor";
+    private string fallFloorTag = "FallFloor";
     #endregion
 
     // Start is called before the first frame update
@@ -95,21 +98,26 @@ public class Player : MonoBehaviour
     {
         if (!isLose && !GManager.instance.isGameOver)
         {
-        // 接地判定を受け取る
-        isGround = ground.IsGround();
-        isHead = head.IsGround();
+            // 接地判定を受け取る
+            isGround = ground.IsGround();
+            isHead = head.IsGround();
 
-        // 各種座標軸の速度を求める
+            // 各種座標軸の速度を求める
 
-        float xSpeed = GetXSpeed();
-        float ySpeed = GetYSpeed();
+            float xSpeed = GetXSpeed();
+            float ySpeed = GetYSpeed();
 
 
-        // アニメーション適用
-        SetAnimation();
+            // アニメーション適用
+            SetAnimation();
 
-    // 移動速度を設定
-        rb.velocity = new Vector2(xSpeed, ySpeed);
+            // 移動速度を設定
+            Vector2 addVelocity = Vector2.zero;
+            if(moveObj != null)
+            {
+                addVelocity = moveObj.GetVelocity();
+            }
+            rb.velocity = new Vector2(xSpeed, ySpeed) + addVelocity;
         }
         else
         {
@@ -315,7 +323,11 @@ public class Player : MonoBehaviour
     #region //接触判定
     private void OnCollisionEnter2D(Collision2D collision) 
     {
-        if (collision.collider.tag == enemyTag)
+        bool enemy = (collision.collider.tag == enemyTag);
+        bool moveFloor = (collision.collider.tag == moveFloorTag);
+        bool fallFloor = (collision.collider.tag == fallFloorTag);
+
+        if (enemy || moveFloor || fallFloor)
         {
             foreach (ContactPoint2D p in collision.contacts)
             {
@@ -327,29 +339,55 @@ public class Player : MonoBehaviour
 
                 if (p.point.y < judgePos ) // 衝突した位置が自分の中心より下だったら
                 {
-                    // もう一度跳ねる
-                    ObjectCollision o = collision.gameObject.GetComponent<ObjectCollision>();
-                    if (o != null)
+                    if (enemy || fallFloor)
                     {
-                        otherJumpHeight = o.boundHeight;
-                        o.playerStepOn = true;
-                        jumpPos =transform.position.y;
-                        isOtherJump = true;
-                        isJump = false;
-                        jumpTime = 0.0f;
+                        // もう一度跳ねる
+                        ObjectCollision o = collision.gameObject.GetComponent<ObjectCollision>();
+                        if (o != null)
+                        {
+                            if (enemy)
+                            {
+                                otherJumpHeight = o.boundHeight;
+                                o.playerStepOn = true;
+                                jumpPos =transform.position.y;
+                                isOtherJump = true;
+                                isJump = false;
+                                jumpTime = 0.0f;
+                            }
+                            else if (fallFloor)
+                            {
+                                o.playerStepOn = true;
+                            }
+                        }
+                        else
+                        {
+                            Debug.Log("ObjectCollisionが付いてないよ!");
+                        }
                     }
-                    else
+                    else if (moveFloor)
                     {
-                        Debug.Log("ObjectCollisionが付いてないよ!");
+                        moveObj = collision.gameObject.GetComponent<MoveObject>();
                     }
                 }
                 else
                 {
-                    // ダウン
-                    ReceiveDamage(true);
-                    break;
+                    if (enemy)
+                    {
+                        // ダウン
+                        ReceiveDamage(true);
+                        break;
+                    }
                 }
             }
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.collider.tag == moveFloorTag)
+        {
+            // 動く床から離れた
+            moveObj = null;
         }
     }
 
