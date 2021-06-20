@@ -10,7 +10,8 @@ public class GManager : MonoBehaviour
     [Header("現在の復帰位置")] public int continueNum;
     [Header("現在の残機")] public int heartNum;
     [Header("デフォルト残機")] public int defaultHeartNum;
-    [HideInInspector] public bool isGameOver = false;
+    [HideInInspector] public bool isGameOver;
+    [HideInInspector] public bool isStageClear;
 
     private AudioSource audioSource = null;
 

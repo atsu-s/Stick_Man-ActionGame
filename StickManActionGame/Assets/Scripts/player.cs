@@ -35,6 +35,7 @@ public class Player : MonoBehaviour
     private bool isOtherJump = false;
     private bool isContinue = false;
     private bool nonLoseAnim = false;
+    private bool isClearMotion = false;
     private float continueTime = 0.0f;
     private float blinkTime = 0.0f;
     private float jumpPos = 0.0f;
@@ -96,7 +97,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (!isLose && !GManager.instance.isGameOver)
+        if (!isLose && !GManager.instance.isGameOver && !GManager.instance.isStageClear)
         {
             // 接地判定を受け取る
             isGround = ground.IsGround();
@@ -121,6 +122,11 @@ public class Player : MonoBehaviour
         }
         else
         {
+            if (!isClearMotion && GManager.instance.isStageClear)
+            {
+                anim.Play("player_clear");
+                isClearMotion = true;
+            }
             rb.velocity = new Vector2(0, -gravity);
         }
     }
@@ -300,7 +306,7 @@ public class Player : MonoBehaviour
 
     private void ReceiveDamage(bool loseAnim)
     {
-        if (isLose)
+        if (isLose || GManager.instance.isStageClear)
         {
             return;
         }

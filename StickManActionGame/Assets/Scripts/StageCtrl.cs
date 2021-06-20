@@ -11,6 +11,9 @@ public class StageCtrl : MonoBehaviour
     [Header("フェード")] public FadeImage fade;
     [Header("ゲームオーバーSE")] public AudioClip gameOverSE;
     [Header("リトライSE")] public AudioClip retrySE;
+    [Header("ステージクリアSE")] public AudioClip stageClearSE;
+    [Header("ステージクリア")] public GameObject stageClearObj;
+    [Header("ステージクリア判定")] public PlayerTriggerCheck stageClearTrigger;
 
     private Player p;
     private int nextStageNum;
@@ -18,6 +21,7 @@ public class StageCtrl : MonoBehaviour
     private bool doGameOver = false;
     private bool retryGame = false;
     private bool doSceneChange = false;
+    private bool doClear = false;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +29,7 @@ public class StageCtrl : MonoBehaviour
         if (playerObj != null && continuePoint != null && continuePoint.Length > 0 && gameOverObj != null && fade != null)
         {
             gameOverObj.SetActive(false);
+            stageClearObj.SetActive(false);
             playerObj.transform.position = continuePoint[0].transform.position;
             p = playerObj.GetComponent<Player>();
 
@@ -62,6 +67,11 @@ public class StageCtrl : MonoBehaviour
                 Debug.Log("コンティニューポイントの設定が足りてないよ!");
             }
         }
+        else if (stageClearTrigger != null && stageClearTrigger.isOn && !doGameOver && !doClear)
+        {
+            StageClear();
+            doClear = true;
+        }
 
         if (fade != null && startFade && !doSceneChange)
         {
@@ -76,6 +86,7 @@ public class StageCtrl : MonoBehaviour
                 {
                     GManager.instance.stageNum = nextStageNum;
                 }
+                GManager.instance.isStageClear = false;
                 SceneManager.LoadScene("stage" + nextStageNum);
                 doSceneChange = true;
             }
@@ -97,5 +108,15 @@ public class StageCtrl : MonoBehaviour
             fade.StartFadeOut();
             startFade = true;
         }
+    }
+
+    /// <summary>
+    /// ステージをクリアした
+    /// </summary>
+    public void StageClear()
+    {
+        GManager.instance.isStageClear = true;
+        stageClearObj.SetActive(true);
+        GManager.instance.PlaySE(stageClearSE);
     }
 }
